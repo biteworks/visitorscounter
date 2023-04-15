@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body, html {
+  @apply bg-slate-100 text-slate-800 tracking-normal;
+}
+
+.button{
+  @apply border border-gray-300 font-medium rounded-lg text-sm py-2 text-center
+}

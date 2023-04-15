@@ -68,15 +68,21 @@ function App() {
     if (index != 'all') {
       navigator.clipboard.writeText(counters[index].count);
       toast.success('Anzahl in Zwischenablage kopiert!');
+      navigator.vibrate(50);
     } else {
-      let textToCopy = '';
-      counters.map((counter) => {
-        textToCopy += counter.name + ': ' + counter.count + '\r\n';
-      });
-      navigator.clipboard.writeText(textToCopy);
-      toast.success('Alles in Zwischenablage kopiert!');
+      if (completeCount > 0) {
+        let textToCopy = '';
+        counters.map((counter) => {
+          textToCopy += counter.name + ': ' + counter.count + '\r\n';
+        });
+        navigator.clipboard.writeText(textToCopy);
+        toast.success('Alles in Zwischenablage kopiert!');
+        navigator.vibrate(50);
+      } else {
+        toast.error('Nichts zu kopieren!');
+        navigator.vibrate([100, 100]);
+      }
     }
-    navigator.vibrate(50);
   }
 
   function saveNumbersToLocalStorage() {
@@ -109,7 +115,12 @@ function App() {
       <div className="grid grid-cols-2 gap-2 text-sm">
         <div
           onClick={() => handleCopyToClipboard('all')}
-          className="bg-white p-2 rounded-md text-center"
+          className={
+            'bg-white p-2 rounded-md text-center' +
+            (completeCount == 0
+              ? ' opacity-50 cursor-not-allowed'
+              : '')
+          }
         >
           <div className="inline-flex items-center">
             <svg
@@ -131,7 +142,12 @@ function App() {
         </div>
         <div
           onClick={completeReset}
-          className="bg-white p-2 rounded-md text-center"
+          className={
+            'bg-white p-2 rounded-md text-center' +
+            (completeCount == 0
+              ? ' opacity-50 cursor-not-allowed'
+              : '')
+          }
         >
           <div className="inline-flex items-center">
             <svg

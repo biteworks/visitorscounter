@@ -47,18 +47,12 @@ function App() {
   }
 
   function handleDecrement(index) {
-    const newCounters = [...counters];
-    newCounters[index].count--;
-    setCounters(newCounters);
-    saveNumbersToLocalStorage();
-  }
-
-  function handleReset(index) {
-    const newCounters = [...counters];
-    newCounters[index].count = 0;
-    setCounters(newCounters);
-    setEventName('Gottesdienst');
-    saveNumbersToLocalStorage();
+    if (counters[index].count > 0) {
+      const newCounters = [...counters];
+      newCounters[index].count--;
+      setCounters(newCounters);
+      saveNumbersToLocalStorage();
+    }
   }
 
   function completeReset() {
@@ -121,7 +115,6 @@ function App() {
             count={counter.count}
             handleIncrement={handleIncrement}
             handleDecrement={handleDecrement}
-            handleReset={handleReset}
             handleCopyToClipboard={handleCopyToClipboard}
           />
         ))}

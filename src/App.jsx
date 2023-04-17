@@ -4,6 +4,11 @@ import toast, { Toaster } from 'react-hot-toast';
 import { formateTimestamp } from './Helpers';
 
 function App() {
+  const [eventName, setEventName] = useState(() => {
+    const eventName = localStorage.getItem('eventName');
+    return eventName ? eventName : 'Gottesdienst';
+  });
+
   const [counters, setCounters] = useState(() => {
     const savedNumbers = localStorage.getItem('savedNumbers');
     return savedNumbers
@@ -30,6 +35,8 @@ function App() {
       tempCount += counter.count;
     });
     setCompleteCount(tempCount);
+
+    localStorage.setItem('eventName', eventName);
   });
 
   function handleIncrement(index) {
@@ -50,6 +57,7 @@ function App() {
     const newCounters = [...counters];
     newCounters[index].count = 0;
     setCounters(newCounters);
+    setEventName('Gottesdienst');
     saveNumbersToLocalStorage();
   }
 
@@ -61,6 +69,7 @@ function App() {
       setCounters(newCounters);
     }
     saveNumbersToLocalStorage();
+    setEventName('Gottesdienst');
     navigator.vibrate(200);
   }
 
@@ -71,7 +80,7 @@ function App() {
       navigator.vibrate(50);
     } else {
       if (completeCount > 0) {
-        let textToCopy = '';
+        let textToCopy = eventName + '\r\n';
         counters.map((counter) => {
           textToCopy += counter.name + ': ' + counter.count + '\r\n';
         });
@@ -97,7 +106,13 @@ function App() {
       <h1 className="text-center my-5 font-bold text-lg">
         Besucherzähler
       </h1>
-      <div className="bg-white p-5 rounded-md mb-4">
+      <div className="bg-white p-5 rounded-md mb-4 items-inline">
+        <input
+          type="text"
+          className="mb-4 text-lg font-bold"
+          value={eventName}
+          onChange={(e) => setEventName(e.target.value)}
+        />
         {counters.map((counter, index) => (
           <CounterElement
             key={index}
@@ -110,7 +125,9 @@ function App() {
             handleCopyToClipboard={handleCopyToClipboard}
           />
         ))}
-        <div className="mt-5">Gesamt: {completeCount}</div>
+        <div className="mt-5 font-semibold">
+          Gesamt: {completeCount}
+        </div>
       </div>
       <div className="grid grid-cols-2 gap-2 text-sm">
         <div
@@ -168,7 +185,6 @@ function App() {
           </div>
         </div>
       </div>
-
       <div className="text-center mt-4 opacity-50">
         Letzte Zählung {lastUpdated}
       </div>

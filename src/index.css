@@ -4,6 +4,9 @@
 
 body, html {
   @apply bg-slate-100 text-slate-800 tracking-normal;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .button{
